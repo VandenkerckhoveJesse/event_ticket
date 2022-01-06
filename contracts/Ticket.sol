@@ -16,5 +16,9 @@ contract Ticket is ERC721, Ownable{
         eventAddress = address(0);
     }
 
+    function setEventAddress(address _eventAddress) external onlyOwner {
+        eventAddress = _eventAddress;
+    }
+
 
 }
