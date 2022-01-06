@@ -13,19 +13,19 @@ contract Event{
 
     EventInfo[] public events;
 
-    constructor(address ticketAddress) {
-        ticketContractAddress = ticketAddress;
+    constructor(int ticketAddress) public {
+        //ticketContractAddress = ticketAddress;
     }
 
-    function organizeEvent() returns (uint) {
+    function organizeEvent() external returns (uint) {
         return 0;
     }
 
-    function purchaseTicket(uint eventId) payable returns (uint) {
+    function purchaseTicket(uint eventId) external payable returns (uint) {
         return 0;
     }
 
-    function redeemTicket(uint ticketId, uint eventId) {
+    function redeemTicket(uint ticketId, uint eventId) external {
 
     }
 
