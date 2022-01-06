@@ -1,32 +1,30 @@
-pragma solidity ^0.8.0;
+pragma solidity 0.8.9;
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Event{
-    address public ticketContractAddress;
+contract Event is Ownable{
+    address public ticketAddress;
 
-    struct EventInfo{
+    struct EventInfo {
         string name;
         uint price;
         uint totalTickets;
         uint remainingTickets;
-        address organizer;
+        address owner;
     }
 
     EventInfo[] public events;
 
-    constructor(int ticketAddress) public {
-        //ticketContractAddress = ticketAddress;
+    constructor() public{
+        ticketAddress = address(0);
     }
 
-    function organizeEvent() external returns (uint) {
-        return 0;
+    function setTicketAddress(address _ticketAddress) external onlyOwner{
+        ticketAddress = _ticketAddress;
     }
 
-    function purchaseTicket(uint eventId) external payable returns (uint) {
-        return 0;
-    }
-
-    function redeemTicket(uint ticketId, uint eventId) external {
-
-    }
-
+    //function organizeEvent(string name, uint  price, uint  totalTickets) external returns (uint) {
+    //    uint id = events.push(EventInfo(name, price, totalTickets, msg.sender)) - 1;
+    //    return id;
+    //}
 }
+
