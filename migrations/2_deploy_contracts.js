@@ -7,8 +7,7 @@ module.exports = async (deployer) => {
     let eventInstance = await Event.deployed()
     let ticketInstance = await Ticket.deployed();
 
-    console.log("set ticketaddress")
+
     await eventInstance.setTicketAddress(ticketInstance.address);
-    console.log(await eventInstance.ticketAddress())
     //await ticketInstance.updateEventAddress(eventInstance.address);
 }

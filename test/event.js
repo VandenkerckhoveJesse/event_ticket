@@ -7,13 +7,13 @@ contract("Event", async accounts => {
         event = await Event.new({from: ownerAccount});
     })
     it("should fetch ticket address", async () => {
-        const address = await event.ticketAddress();
+        const address = await event.ticketContractAddress();
         console.log(address)
         assert.equal(address, '0x0000000000000000000000000000000000000000')
     })
     it("should be able to set ticket address", async () => {
         await event.setTicketAddress(accounts[0])
-        const address = await event.ticketAddress();
+        const address = await event.ticketContractAddress();
         assert.equal(address, accounts[0])
     })
     it("should not allow non-owner to set ticket address", async() =>{
@@ -24,11 +24,10 @@ contract("Event", async accounts => {
                 e.message)
         }
     })
-    /*it("should organize new events", async() => {
+    it("should organize new events", async() => {
         await event.organizeEvent("Koekjes dans", 5, 10, {from: accounts[1]})
-        await value = event.events(0);
-        console.log(value)
-        assert.equal(1,1)
-    })*/
+        let value = await event.events(0);
+        assert.equal(value[0], "Koekjes dans")
+    })
 
 })

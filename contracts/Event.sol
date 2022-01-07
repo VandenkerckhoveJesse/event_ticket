@@ -2,7 +2,7 @@ pragma solidity 0.8.9;
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Event is Ownable{
-    address public ticketAddress;
+    address public ticketContractAddress;
 
     struct EventInfo {
         string name;
@@ -15,16 +15,17 @@ contract Event is Ownable{
     EventInfo[] public events;
 
     constructor() public{
-        ticketAddress = address(0);
+        ticketContractAddress = address(0);
     }
 
     function setTicketAddress(address _ticketAddress) external onlyOwner{
-        ticketAddress = _ticketAddress;
+        ticketContractAddress = _ticketAddress;
     }
 
-    //function organizeEvent(string name, uint  price, uint  totalTickets) external returns (uint) {
-    //    uint id = events.push(EventInfo(name, price, totalTickets, msg.sender)) - 1;
-    //    return id;
-    //}
+    function organizeEvent(string memory name, uint  price, uint  totalTickets) external returns (uint) {
+        events.push(EventInfo(name, price, totalTickets, totalTickets, msg.sender));
+        uint id = events.length - 1;
+        return id;
+    }
 }
 
