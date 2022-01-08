@@ -1,5 +1,5 @@
 const Event = artifacts.require('Event');
-
+/*
 contract("Event", async accounts => {
     let event;
     const ownerAccount = accounts[0];
@@ -30,4 +30,4 @@ contract("Event", async accounts => {
         assert.equal(value[0], "Koekjes dans")
     })
 
-})
+})*/
