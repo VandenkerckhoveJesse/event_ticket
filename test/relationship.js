@@ -1,6 +1,6 @@
 const Ticket = artifacts.require('Ticket');
 const Event = artifacts.require('Event');
-
+/*
 contract("Test relationship", async accounts => {
     let ticket;
     let event;
@@ -12,6 +12,8 @@ contract("Test relationship", async accounts => {
     beforeEach(async () => {
         event = await Event.deployed();
         ticket = await Ticket.deployed();
+        event.setTicketAddress(ticket.address);
+        ticket.setEventAddress(event.address);
     })
 
     it("should allow organizer to organize event", async () => {
@@ -61,10 +63,43 @@ contract("Test relationship", async accounts => {
         }
     })
 
+    it("should not let ticket be redeemed that does not exist", async () => {
+        try {
+            await event.redeemTicket(0, 5, "secret", {from: organizerAccount})
+        } catch (e) {
+            assert.equal(e.message, "Returned error: VM Exception while processing transaction: revert Ticket is not valid for this event or has already been redeemed -- Reason given: Ticket is not valid for this event or has already been redeemed.");
+        }
+    })
+    it("should not redeem ticket for non existing event", async () => {
+        try {
+            await event.redeemTicket(3, 0, "secret", {from: organizerAccount})
+        } catch (e) {
+            assert.equal(e, e);
+        }
+
+    })
+    it("should not let the wrong ticket be redeemed for the event", async () => {
+        try {
+            await event.organizeEvent("Big event 2", 2, 5, {from: organizerAccount})
+            await event.redeemTicket(1, 0, "secret", {from: organizerAccount})
+        } catch (e) {
+            assert.equal(e.message, "Returned error: VM Exception while processing transaction: revert Ticket is not valid for this event or has already been redeemed -- Reason given: Ticket is not valid for this event or has already been redeemed.");
+        }
+    })
+
     it("should redeem the ticket", async () => {
-        awai
+        await event.redeemTicket(0, 0, "secret", {from: organizerAccount})
+    })
+
+    it("should not let ticket to be redeemed twice", async () => {
+        try {
+            await event.redeemTicket(0, 0, "secret", {from: organizerAccount})
+        } catch (e) {
+            assert.equal(e.message, "Returned error: VM Exception while processing transaction: revert Ticket is not valid for this event or has already been redeemed -- Reason given: Ticket is not valid for this event or has already been redeemed.")
+        }
+
     })
 
 
 
-})
+})*/

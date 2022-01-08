@@ -5,11 +5,12 @@ contract("Ticket", async accounts => {
     const ownerAccount = accounts[0];
     beforeEach(async () => {
         ticket = await Ticket.new({from: ownerAccount})
+        await ticket.setEventAddress(accounts[0])
     })
     it("should fetch ticket address", async () => {
         const address = await ticket.eventContractAddress();
         console.log(address)
-        assert.equal(address, '0x0000000000000000000000000000000000000000')
+        assert.equal(address, ownerAccount)
     })
     it("should be able to set event address", async () => {
         await ticket.setEventAddress(accounts[0]);
@@ -29,6 +30,30 @@ contract("Ticket", async accounts => {
         await ticket.create(ownerAccount, 2)
         let value = await ticket.tickets(0);
         assert.equal(value[0], 2);
+    })
+
+    it("should validate ticket", async() => {
+        await ticket.create(ownerAccount, 2);
+        assert.equal(await ticket.isValid(0, 2), true)
+    })
+
+    it("should not validate wrong ticket", async() => {
+        await ticket.create(ownerAccount, 2);
+        assert.equal(await ticket.isValid(0, 1), false)
+    })
+
+    it("should not validate non existing tickets", async() => {
+        try {
+            assert.equal(await ticket.isValid(0, 0), false)
+        } catch (e) {
+            console.log(e)
+        }
+
+    })
+
+    it("should show all ticket data", async () => {
+        await ticket.create(ownerAccount, 2);
+        console.log(await ticket.getTicketInfo(0));
     })
 
 })*/

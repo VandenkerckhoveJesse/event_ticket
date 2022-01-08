@@ -1,5 +1,5 @@
 const Event = artifacts.require('Event');
-/*
+
 contract("Event", async accounts => {
     let event;
     const ownerAccount = accounts[0];
@@ -30,4 +30,21 @@ contract("Event", async accounts => {
         assert.equal(value[0], "Koekjes dans")
     })
 
-})*/
+    it("should show all events", async () => {
+        await event.organizeEvent("Koekjes dans", 5, 10, {from: accounts[1]})
+        await event.organizeEvent("Koekjes dans2", 5, 10, {from: accounts[0]})
+        await event.organizeEvent("Koekjes dans3", 5, 10, {from: accounts[2]})
+        let result = await event.getAllEvents();
+        assert.equal(result.length, 3);
+    })
+
+    it("should show all own events", async() => {
+        await event.organizeEvent("Koekjes dans mine", 5, 10, {from: accounts[0]})
+        await event.organizeEvent("Koekjes dans mine", 5, 10, {from: accounts[0]})
+        await event.organizeEvent("Koekjes dans2", 5, 10, {from: accounts[0]})
+        await event.organizeEvent("Koekjes dans3", 5, 10, {from: accounts[2]})
+        let result = await event.getAllOwnedEvents();
+        assert.equal(result.length, 2)
+    })
+
+})

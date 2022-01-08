@@ -11,7 +11,10 @@ contract Event is Ownable{
         uint totalTickets;
         uint remainingTickets;
         address owner;
+        bool exists;
     }
+
+    mapping(address => uint256[]) internal ownedEvents;
 
     EventInfo[] public events;
 
@@ -29,8 +32,9 @@ contract Event is Ownable{
     }
 
     function organizeEvent(string memory name, uint  price, uint  totalTickets) external returns (uint) {
-        events.push(EventInfo(name, price, totalTickets, totalTickets, msg.sender));
+        events.push(EventInfo(name, price, totalTickets, totalTickets, msg.sender, true));
         uint id = events.length - 1;
+        ownedEvents[msg.sender].push(id);
         return id;
     }
 
@@ -44,12 +48,28 @@ contract Event is Ownable{
         return ticketId;
     }
 
-    function redeemTicket(uint eventId, uint ticketId, string pass) external onlyEventOwner(eventId) {
+    function redeemTicket(uint eventId, uint ticketId, string memory pass) external onlyEventOwner(eventId){
+        require(events[eventId].exists, "The event does not exist");
         Ticket ticketContract = Ticket(ticketContractAddress);
-        require(ticketContract.tickets[ticketId].eventId == eventId, "Ticket is not for this event");
+        require(ticketContract.isValid(ticketId, eventId), "Ticket is not valid for this event or has already been redeemed");
         string memory ticketPass = ticketContract.getEncryptedPass(ticketId);
-        require(ticketPass == pass, "Encrypted passes do not match up");
-        ticketContract.redeem();
+        require(keccak256(bytes(ticketPass)) == keccak256(bytes(pass)), "Encrypted passes do not match up");
+        ticketContract.redeem(ticketId);
+    }
+
+    function getAllOwnedEvents() external view returns (EventInfo[] memory) {
+        uint[] memory ownedEventsSender = ownedEvents[msg.sender];
+        uint eventCount = ownedEventsSender.length - 1;
+        EventInfo[] memory eventsInfo = new EventInfo[](eventCount);
+        for(uint i = 0; i < eventCount; i++) {
+            eventsInfo[i] = events[ownedEventsSender[i]];
+        }
+        return eventsInfo;
+
+    }
+
+    function getAllEvents() external view returns (EventInfo[] memory) {
+        return events;
     }
 }
 

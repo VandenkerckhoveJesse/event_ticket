@@ -37,7 +37,7 @@ contract Ticket is ERC721Enumerable, Ownable{
     }
 
 
-    function create (address buyer, uint256 eventId) external returns (uint) {
+    function create (address buyer, uint256 eventId) external onlyEventContract returns (uint) {
         tickets.push(TicketInfo(eventId, false, ""));
         uint id = tickets.length - 1;
         _mint(buyer, id);
@@ -53,6 +53,10 @@ contract Ticket is ERC721Enumerable, Ownable{
         return tokensId;
     }
 
+    function getTicketInfo(uint tokenid) external view onlyTicketOwner(tokenid) returns (TicketInfo memory) {
+        return tickets[tokenid];
+    }
+
     function setEncryptedPass(uint ticketId, string memory pass) onlyTicketOwner(ticketId) external {
         tickets[ticketId].encryptedPass = pass;
     }
@@ -64,6 +68,13 @@ contract Ticket is ERC721Enumerable, Ownable{
 
     function redeem(uint ticketId) external onlyEventContract {
         tickets[ticketId].redeemed = true;
+    }
+
+    function isValid(uint ticketId, uint eventId) external view returns (bool) {
+        return
+        _exists(ticketId) &&
+        (tickets[ticketId].eventId == eventId) &&
+        (tickets[ticketId].redeemed != true);
     }
 
 
