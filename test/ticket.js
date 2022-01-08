@@ -1,5 +1,5 @@
 const Ticket = artifacts.require('Ticket');
-/*
+
 contract("Ticket", async accounts => {
     let ticket;
     const ownerAccount = accounts[0];
@@ -56,4 +56,4 @@ contract("Ticket", async accounts => {
         console.log(await ticket.getTicketInfo(0));
     })
 
-})*/
+})

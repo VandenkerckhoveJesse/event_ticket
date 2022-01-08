@@ -1,6 +1,6 @@
 const Ticket = artifacts.require('Ticket');
 const Event = artifacts.require('Event');
-/*
+
 contract("Test relationship", async accounts => {
     let ticket;
     let event;
@@ -102,4 +102,4 @@ contract("Test relationship", async accounts => {
 
 
 
-})*/
+})
