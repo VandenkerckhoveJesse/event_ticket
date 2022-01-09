@@ -9,5 +9,5 @@ module.exports = async (deployer) => {
 
 
     await eventInstance.setTicketAddress(ticketInstance.address);
-    //await ticketInstance.updateEventAddress(eventInstance.address);
+    await ticketInstance.setEventAddress(eventInstance.address);
 }

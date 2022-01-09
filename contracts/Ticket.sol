@@ -55,7 +55,7 @@ contract Ticket is ERC721Enumerable, Ownable{
 
     function getAllOwnedTickets() external view returns (TicketInfo[] memory) {
         uint[] memory ownedTicketsSender = tokensOfOwner(msg.sender);
-        uint ticketCount = ownedTicketsSender.length - 1;
+        uint ticketCount = ownedTicketsSender.length;
         TicketInfo[] memory ticketsInfo = new TicketInfo[](ticketCount);
         for(uint i = 0; i < ticketCount; i++) {
             ticketsInfo[i] = tickets[ownedTicketsSender[i]];

@@ -97,7 +97,10 @@ contract("Test relationship", async accounts => {
         } catch (e) {
             assert.equal(e.message, "Returned error: VM Exception while processing transaction: revert Ticket is not valid for this event or has already been redeemed -- Reason given: Ticket is not valid for this event or has already been redeemed.")
         }
-
+    })
+    it("should do extra purchase testing", async () => {
+        await event.purchaseTicket(1, {from: ticketAccount, value: 2});
+        console.log(await ticket.getAllOwnedTickets({from: ticketAccount}))
     })
 
 

@@ -53,7 +53,18 @@ contract("Ticket", async accounts => {
 
     it("should show all ticket data", async () => {
         await ticket.create(ownerAccount, 2);
-        console.log(await ticket.getTicketInfo(0));
+        let result = await ticket.getTicketInfo(0);
+        assert.equal(result.eventId, 2)
+    })
+
+    it("should get all owned tickets", async () => {
+        await ticket.create(accounts[2], 1);
+        await ticket.create(accounts[3], 2);
+        await ticket.create(accounts[3], 3);
+        await ticket.create(accounts[3], 4);
+
+        let result = await ticket.getAllOwnedTickets({from: accounts[3]});
+        assert.equal(result.length, 3)
     })
 
 })

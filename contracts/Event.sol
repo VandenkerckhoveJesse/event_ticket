@@ -38,14 +38,13 @@ contract Event is Ownable{
         return id;
     }
 
-    function purchaseTicket(uint eventId) external payable returns (uint) {
-        require(events[eventId].owner != address(0), "Event does not exist");
+    function purchaseTicket(uint eventId) external payable {
+        require(events[eventId].exists, "Event does not exist");
         require(events[eventId].remainingTickets > 0, "No more remaining tickets");
         require(msg.value == events[eventId].price, "Payment does not match price");
         Ticket ticketContract = Ticket(ticketContractAddress);
         uint ticketId = ticketContract.create(msg.sender, eventId);
         events[eventId].remainingTickets  --;
-        return ticketId;
     }
 
     function redeemTicket(uint eventId, uint ticketId, string memory pass) external onlyEventOwner(eventId){
@@ -59,7 +58,7 @@ contract Event is Ownable{
 
     function getAllOwnedEvents() external view returns (EventInfo[] memory) {
         uint[] memory ownedEventsSender = ownedEvents[msg.sender];
-        uint eventCount = ownedEventsSender.length - 1;
+        uint eventCount = ownedEventsSender.length;
         EventInfo[] memory eventsInfo = new EventInfo[](eventCount);
         for(uint i = 0; i < eventCount; i++) {
             eventsInfo[i] = events[ownedEventsSender[i]];

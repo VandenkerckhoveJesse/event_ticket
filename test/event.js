@@ -44,7 +44,7 @@ contract("Event", async accounts => {
         await event.organizeEvent("Koekjes dans2", 5, 10, {from: accounts[0]})
         await event.organizeEvent("Koekjes dans3", 5, 10, {from: accounts[2]})
         let result = await event.getAllOwnedEvents();
-        assert.equal(result.length, 2)
+        assert.equal(result.length, 3)
     })
 
 })

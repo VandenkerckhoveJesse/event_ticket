@@ -41,16 +41,17 @@ const App = {
     const events = await getAllEvents().call();
     const eventsElement = document.querySelector(".events")
     console.log(events)
-    events.forEach((event) => {
+    events.forEach((event, i) => {
+      const inEth = this.web3.utils.fromWei(event.price, 'ether');
       eventsElement.innerHTML +=
           `<div class="block m-2">
             <h3>${event.name}</h3>
             <ul>
-              <li>Price : ${event.price} Eth</li>
+              <li>Price : ${inEth} Eth</li>
               <li>Remaining tickets : ${event.remainingTickets}</li>
               <li>Owner : ${event.owner}</li>
             </ul>
-            <a href="">buy ticket</a>
+            <button id="buy-${i}" onclick="App.buyTicket(${i}, ${event.price})">buy</button>
           </div>`
       console.log(event)
     })
@@ -58,26 +59,25 @@ const App = {
     balanceElement.innerHTML = balance;*/
   },
   refreshTickets: async function() {
-    const { getAllEvents } = this.ticketMeta.methods;
-    const events = await getAll().call();
-    const eventsElement = document.querySelector(".events")
-    console.log(events)
-    events.forEach((event) => {
-      eventsElement.innerHTML +=
+    const { getAllOwnedTickets } = this.ticketMeta.methods;
+    const { events } = this.eventMeta.methods;
+    const tickets = await getAllOwnedTickets().call({from: this.account});
+    const ticketsElement = document.getElementById("tickets")
+    console.log(tickets)
+    tickets.forEach(async (ticket) => {
+      const event = await events(ticket.eventId).call({from: this.account});
+      ticketsElement.innerHTML +=
           `<div class="block m-2">
             <h3>${event.name}</h3>
-            <ul>
-              <li>Price : ${event.price} Eth</li>
-              <li>Remaining tickets : ${event.remainingTickets}</li>
-              <li>Owner : ${event.owner}</li>
-            </ul>
-            <a href="">buy ticket</a>
+            <p>redeemed : ${ticket.redeemed}</p>
+            <button>redeem</button>
           </div>`
       console.log(event)
     })
     /*const balanceElement = document.getElementsByClassName("balance")[0];
     balanceElement.innerHTML = balance;*/
   },
+
 
   sendCoin: async function() {
     const amount = parseInt(document.getElementById("amount").value);
@@ -99,13 +99,23 @@ const App = {
   createEvent: async function() {
     const name = document.getElementById("name").value;
     const price = document.getElementById("price").value;
+    const wei = this.web3.utils.toWei(price, 'ether');
     const amount = document.getElementById("totalTickets").value;
     document.getElementById("organizeButton").disabled = true
 
     const {organizeEvent} = this.eventMeta.methods;
-    await organizeEvent(name, price, amount).send({from: this.account})
+    await organizeEvent(name, wei, amount).send({from: this.account})
 
     window.location.href="../"
+  },
+  buyTicket: async function(id, price) {
+    var valueAmount = this.web3.utils.toBN(price)
+    const { purchaseTicket } = this.eventMeta.methods;
+    document.getElementById("buy-"+id).disabled = true;
+    await purchaseTicket(id).send({from: this.account, value: valueAmount});
+    document.getElementById("buy-"+id).disabled = false;
+    this.refreshTickets();
+    this.refreshEvents();
   }
 };
 
