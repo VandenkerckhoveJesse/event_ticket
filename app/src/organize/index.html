@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Event Ticket</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<style>
+    input {
+        display: block;
+        margin-bottom: 12px;
+    }
+</style>
+<body class="container">
+<h1>Event Coin — A simple event ticket implementation</h1>
+<p>Welcome 0x000000000000000</p>
+<main class="row">
+    <h2>Organize event</h2>
+    <label for="name">Name:</label>
+    <input type="text" id="name" placeholder="e.g. Big Event" />
+    <label for="price">Price: (in ETH)</label>
+    <input type="number" id="price" placeholder="eg 4.5 ETH">
+    <label for="totalTickets">Total amount of tickets:</label>
+    <input
+            type="number"
+            id="totalTickets"
+            placeholder="e.g. 25"
+    />
+
+    <button id="organizeButton" onclick="App.createEvent()">Create event</button>
+</main>
+
+<script src="../index.js"></script>
+</body>
+</html>

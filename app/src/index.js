@@ -1,11 +1,11 @@
- import Web3 from "web3";
-/*
-import metaCoinArtifact from "../../build/contracts/MetaCoin.json";
+import Web3 from "web3";
+import EventArtifact from "../../build/contracts/Event.json";
+import TicketArtifact from "../../build/contracts/Ticket.json"
 
 const App = {
   web3: null,
   account: null,
-  meta: null,
+  eventMeta: null,
 
   start: async function() {
     const { web3 } = this;
@@ -13,9 +13,9 @@ const App = {
     try {
       // get contract instance
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = metaCoinArtifact.networks[networkId];
-      this.meta = new web3.eth.Contract(
-        metaCoinArtifact.abi,
+      const deployedNetwork = EventArtifact.networks[networkId];
+      this.eventMeta = new web3.eth.Contract(
+        EventArtifact.abi,
         deployedNetwork.address,
       );
 
@@ -23,18 +23,18 @@ const App = {
       const accounts = await web3.eth.getAccounts();
       this.account = accounts[0];
 
-      this.refreshBalance();
+      this.refreshEvents();
     } catch (error) {
       console.error("Could not connect to contract or chain.");
     }
   },
 
-  refreshBalance: async function() {
-    const { getBalance } = this.meta.methods;
-    const balance = await getBalance(this.account).call();
-
-    const balanceElement = document.getElementsByClassName("balance")[0];
-    balanceElement.innerHTML = balance;
+  refreshEvents: async function() {
+    const { getAllEvents } = this.eventMeta.methods;
+    const events = await getAllEvents().call();
+    console.log(events)
+    /*const balanceElement = document.getElementsByClassName("balance")[0];
+    balanceElement.innerHTML = balance;*/
   },
 
   sendCoin: async function() {
@@ -43,7 +43,7 @@ const App = {
 
     this.setStatus("Initiating transaction... (please wait)");
 
-    const { sendCoin } = this.meta.methods;
+    const { sendCoin } = this.eventMeta.methods;
     await sendCoin(receiver, amount).send({ from: this.account });
 
     this.setStatus("Transaction complete!");
@@ -54,6 +54,17 @@ const App = {
     const status = document.getElementById("status");
     status.innerHTML = message;
   },
+  createEvent: async function() {
+    const name = document.getElementById("name").value;
+    const price = document.getElementById("price").value;
+    const amount = document.getElementById("totalTickets").value;
+    document.getElementById("organizeButton").disabled = true
+
+    const {organizeEvent} = this.eventMeta.methods;
+    await organizeEvent(name, price, amount).send({from: this.account})
+
+    window.location.href="../"
+  }
 };
 
 window.App = App;
@@ -74,4 +85,4 @@ window.addEventListener("load", function() {
   }
 
   App.start();
-});*/
+});
