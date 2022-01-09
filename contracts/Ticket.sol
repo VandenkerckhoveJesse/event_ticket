@@ -44,13 +44,23 @@ contract Ticket is ERC721Enumerable, Ownable{
         return id;
     }
 
-    function tokensOfOwner(address _owner) external view returns (uint[] memory) {
+    function tokensOfOwner(address _owner) public view returns (uint[] memory) {
         uint tokenCount = balanceOf(_owner);
         uint[] memory tokensId = new uint256[](tokenCount);
         for(uint i = 0; i < tokenCount; i++) {
             tokensId[i] = tokenOfOwnerByIndex(_owner, i);
         }
         return tokensId;
+    }
+
+    function getAllOwnedTickets() external view returns (TicketInfo[] memory) {
+        uint[] memory ownedTicketsSender = tokensOfOwner(msg.sender);
+        uint ticketCount = ownedTicketsSender.length - 1;
+        TicketInfo[] memory ticketsInfo = new TicketInfo[](ticketCount);
+        for(uint i = 0; i < ticketCount; i++) {
+            ticketsInfo[i] = tickets[ownedTicketsSender[i]];
+        }
+        return ticketsInfo;
     }
 
     function getTicketInfo(uint tokenid) external view onlyTicketOwner(tokenid) returns (TicketInfo memory) {
