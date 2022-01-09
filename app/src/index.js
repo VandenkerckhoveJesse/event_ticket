@@ -32,7 +32,21 @@ const App = {
   refreshEvents: async function() {
     const { getAllEvents } = this.eventMeta.methods;
     const events = await getAllEvents().call();
+    const eventsElement = document.querySelector(".events")
     console.log(events)
+    events.forEach((event) => {
+      eventsElement.innerHTML +=
+          `<div class="block m-2">
+            <h3>${event.name}</h3>
+            <ul>
+              <li>Price : ${event.price} Eth</li>
+              <li>Remaining tickets : ${event.remainingTickets}</li>
+              <li>Owner : ${event.owner}</li>
+            </ul>
+            <a href="">buy ticket</a>
+          </div>`
+      console.log(event)
+    })
     /*const balanceElement = document.getElementsByClassName("balance")[0];
     balanceElement.innerHTML = balance;*/
   },
