@@ -11,8 +11,8 @@
     }
   </style>
   <body class="container">
-    <h1>Event Coin — A simple event ticket implementation</h1>
-    <p>Welcome 0x000000000000000</p>
+    <h1>Event Ticket — A simple event ticket implementation</h1>
+    <p id="welcomeAddress">Welcome 0x000000000000000</p>
     <main class="row">
       <div class="col-4">
         <h2>Your Tickets</h2>
@@ -22,8 +22,8 @@
       </div>
       <div class="col-8">
         <h2>Events</h2>
-        <a href="">my events</a>
         <a href="organize">organize event</a>
+        <a href="manage">manage events</a>
         <div class="d-flex events"></div>
       </div>
 
@@ -32,7 +32,12 @@
         errors and warnings.
       </p>
     </main>
-
+    <script>
+      this.refresh = () => {
+        App.refreshTickets();
+        App.refreshEvents();
+      }
+    </script>
     <script src="index.js"></script>
   </body>
 </html>

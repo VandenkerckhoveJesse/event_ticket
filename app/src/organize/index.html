@@ -12,7 +12,7 @@
 </style>
 <body class="container">
 <h1>Event Coin — A simple event ticket implementation</h1>
-<p>Welcome 0x000000000000000</p>
+<p id="welcomeAddress">Welcome 0x000000000000000</p>
 <main class="row">
     <h2>Organize event</h2>
     <label for="name">Name:</label>
@@ -28,7 +28,13 @@
 
     <button id="organizeButton" onclick="App.createEvent()">Create event</button>
 </main>
+<script>
+    this.refresh = () => {
 
-<script src="../index.js"></script>
+    }
+</script>
+<script src="../index.js">
+</script>
+
 </body>
 </html>

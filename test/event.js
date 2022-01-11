@@ -25,9 +25,9 @@ contract("Event", async accounts => {
         }
     })
     it("should organize new events", async() => {
-        await event.organizeEvent("Koekjes dans", 5, 10, {from: accounts[1]})
+        await event.organizeEvent("Big Dance", 5, 10, {from: accounts[1]})
         let value = await event.events(0);
-        assert.equal(value[0], "Koekjes dans")
+        assert.equal(value[0], "Big dance")
     })
 
     it("should show all events", async () => {

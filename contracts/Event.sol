@@ -14,7 +14,7 @@ contract Event is Ownable{
         bool exists;
     }
 
-    mapping(address => uint256[]) internal ownedEvents;
+    mapping(address => uint256[]) public ownedEvents;
 
     EventInfo[] public events;
 
@@ -43,7 +43,7 @@ contract Event is Ownable{
         require(events[eventId].remainingTickets > 0, "No more remaining tickets");
         require(msg.value == events[eventId].price, "Payment does not match price");
         Ticket ticketContract = Ticket(ticketContractAddress);
-        uint ticketId = ticketContract.create(msg.sender, eventId);
+        ticketContract.create(msg.sender, eventId);
         events[eventId].remainingTickets  --;
     }
 
@@ -64,7 +64,6 @@ contract Event is Ownable{
             eventsInfo[i] = events[ownedEventsSender[i]];
         }
         return eventsInfo;
-
     }
 
     function getAllEvents() external view returns (EventInfo[] memory) {

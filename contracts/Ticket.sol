@@ -5,16 +5,11 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 contract Ticket is ERC721Enumerable, Ownable{
     address public eventContractAddress;
 
-
-
     struct TicketInfo {
         uint256 eventId;
         bool redeemed;
         string encryptedPass;
     }
-
-
-    //todo eventueel add mappings waar relatie tussen owner en tokens in beide richting worden opgeslaan
 
     TicketInfo[] public tickets;
 
@@ -36,12 +31,31 @@ contract Ticket is ERC721Enumerable, Ownable{
         eventContractAddress = _eventAddress;
     }
 
-
     function create (address buyer, uint256 eventId) external onlyEventContract returns (uint) {
         tickets.push(TicketInfo(eventId, false, ""));
         uint id = tickets.length - 1;
         _mint(buyer, id);
         return id;
+    }
+
+    function setEncryptedPass(uint ticketId, string memory pass) onlyTicketOwner(ticketId) external {
+        tickets[ticketId].encryptedPass = pass;
+    }
+
+    function getEncryptedPass(uint ticketId) external  view returns (string memory) {
+        string memory pass = tickets[ticketId].encryptedPass;
+        return pass;
+    }
+
+    function redeem(uint ticketId) external onlyEventContract {
+        tickets[ticketId].redeemed = true;
+    }
+
+    function isValid(uint ticketId, uint eventId) external view returns (bool) {
+        return
+        _exists(ticketId) &&
+        (tickets[ticketId].eventId == eventId) &&
+        (tickets[ticketId].redeemed != true);
     }
 
     function tokensOfOwner(address _owner) public view returns (uint[] memory) {
@@ -66,26 +80,4 @@ contract Ticket is ERC721Enumerable, Ownable{
     function getTicketInfo(uint tokenid) external view onlyTicketOwner(tokenid) returns (TicketInfo memory) {
         return tickets[tokenid];
     }
-
-    function setEncryptedPass(uint ticketId, string memory pass) onlyTicketOwner(ticketId) external {
-        tickets[ticketId].encryptedPass = pass;
-    }
-
-    function getEncryptedPass(uint ticketId) external  view returns (string memory) {
-        string memory pass = tickets[ticketId].encryptedPass;
-        return pass;
-    }
-
-    function redeem(uint ticketId) external onlyEventContract {
-        tickets[ticketId].redeemed = true;
-    }
-
-    function isValid(uint ticketId, uint eventId) external view returns (bool) {
-        return
-        _exists(ticketId) &&
-        (tickets[ticketId].eventId == eventId) &&
-        (tickets[ticketId].redeemed != true);
-    }
-
-
 }
